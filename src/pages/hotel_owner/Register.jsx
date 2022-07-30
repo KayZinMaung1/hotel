@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import login from "../../assets/images/login.jpg";
+import register from "../../assets/images/register.jpg";
 
 const StyledContainedButton = styled(Button)(({ theme }) => ({
   backgroundColor: "var(--primary-color)",
@@ -26,13 +26,13 @@ const StyledContainedButton = styled(Button)(({ theme }) => ({
 const Image = styled(Paper)(({ theme }) => ({
   height: "80vh",
   position: "relative",
-  backgroundImage: `url(${login})`,
+  backgroundImage: `url(${register})`,
   backgroundSize: "cover",
   backgroundPosition: "center",
   // backgroundColor:"red"
 }));
 
-function Login() {
+function Register() {
   return (
     <Box sx={{ width: "70%" }} position="absolute" left="15%" top="3%">
       <Typography component="h1" variant="h4" sx={{color:"var(--primary-color)",m:"10px"}}>
@@ -48,7 +48,7 @@ function Login() {
               maxWidth="400"
               sx={{
                 mx: "auto", // margin left & right
-                my: 8, // margin top & botom
+                my: 4, // margin top & botom
                 py: 3, // padding top & bottom
                 px: 2, // padding left & right
                 display: "flex",
@@ -63,8 +63,15 @@ function Login() {
                   <b>Welcome!</b>
                 </Typography>
                 <Typography level="body2" fontSize={14} fontWeight={100}>
-                  Sign in to continue
+                  Create an account
                 </Typography>
+                <TextField
+                  required
+                  name="name"
+                  type="text"
+                  placeholder="My Hotel"
+                  label="Hotel Name"
+                />
                 <TextField
                   required
                   name="email"
@@ -80,14 +87,13 @@ function Login() {
                   label="Password"
                 />
                 <StyledContainedButton size="large" variant="contained">
-                  Login
+                  Register
                 </StyledContainedButton>
                 <Typography
-                  endDecorator={<Link href="/sign-up">Sign up</Link>}
                   fontSize="sm"
                   sx={{ alignSelf: "center" }}
                 >
-                  Don't have an account? <Link to="/register">Register</Link>
+                  Already have an account? <Link to="/login">Login</Link>
                 </Typography>
               </Stack>
             </Box>
@@ -98,4 +104,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

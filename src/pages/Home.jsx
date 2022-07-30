@@ -1,6 +1,4 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import main from "../assets/images/main.jpg";
@@ -9,6 +7,7 @@ import { createTheme, Paper, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import OutlinedButton from '../components/OutlinedButton';
 import ContainedButton from '../components/ContainedButton';
+import { AppBar } from '../components/AppBar';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   height: "90vh",
@@ -36,15 +35,7 @@ export default function Home(props) {
   const navigate = useNavigate();
   return (
     <React.Fragment>
-      <AppBar style={{ background: "var(--primary-color)" }}>
-        <Toolbar >
-          <Typography variant="h6" component="div">
-            HotelHUB
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Toolbar />
+      <AppBar/>
       <StyledPaper>
         <StyledBox>
           <Stack sx={{ alignItems: "center" }}>
