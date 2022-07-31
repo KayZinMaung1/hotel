@@ -21,6 +21,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import Availability from "../../components/show_hotel_details/Availability";
 import { style } from "@mui/system";
+import ShowMenu from "./menu/ShowMenu";
+import CreateMenu from "./menu/CreateMenu";
+import EditMenu from "./menu/EditMenu";
 
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -41,11 +44,10 @@ const Admin = () => {
     const content = (
         <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
             <Title level={5}>
-                {/* {user.name} */}
+                Maung Maung
             </Title>
-            {/* <Text>{user.position}</Text> */}
-            <Button danger onClick={handleLogout}>
-                {/* Logout */}
+            <Button danger onClick={handleLogout} size="small">
+                Logout
             </Button>
         </Space>
     );
@@ -117,8 +119,9 @@ const Admin = () => {
                 <Layout>
                     <Content style={{ minHeight: "520px" }}>
                         <Routes>
-                            <Route path="show-menu" element={<Availability />} />
-                            <Route path="create-menu" element={<Availability />} />
+                            <Route path="show-menu" element={<ShowMenu />} />
+                            <Route path="create-menu" element={<CreateMenu />} />
+                            <Route path="edit-menu/:id" element={<EditMenu />} />
                         </Routes>
                     </Content>
                     <Footer
