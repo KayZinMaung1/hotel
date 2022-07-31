@@ -1,198 +1,140 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
-import RoofingIcon from "@mui/icons-material/Roofing";
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import AddIcon from '@mui/icons-material/Add';
-import Availability from '../../components/show_hotel_details/Availability';
-const drawerWidth = 240;
+import React, { useState } from "react";
+// ant design styles
+import { Layout, Menu, Avatar, Space, Popover, Button, Typography } from "antd";
+import 'antd/dist/antd.css';
+import {
+    Link,
+    Routes,
+    Route,
+    useLocation
+} from "react-router-dom";
 
-const openedMixin = (theme) => ({
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-});
+// ant design icons
+import {
+    UserOutlined,
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+    BarsOutlined,
+    PlusOutlined
+} from "@ant-design/icons";
 
-const closedMixin = (theme) => ({
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up('sm')]: {
-        width: `calc(${theme.spacing(8)} + 1px)`,
-    },
-});
+import { useNavigate } from "react-router-dom";
+import Availability from "../../components/show_hotel_details/Availability";
+import { style } from "@mui/system";
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}));
 
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
-        ...(open && {
-            ...openedMixin(theme),
-            '& .MuiDrawer-paper': openedMixin(theme),
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            '& .MuiDrawer-paper': closedMixin(theme),
-        }),
-    }),
+const { Header, Footer, Sider, Content } = Layout;
+const { Title, Text } = Typography;
+const text = (
+    <Title level={4} style={{ textAlign: "center" }}>
+        Profile
+    </Title>
 );
 
-const menuItems = [
-    {   
-
-        text: "Menu List",
-        icon: <FormatListBulletedIcon />
-
-    },
-    {
-        text: "Add New Menu",
-        icon: <AddIcon />
-
-    },
-
-
-]
-
-export default function Admin() {
+const Admin = () => {
+    const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
+    const handleLogout = () => {
+        // dispatch(logout());
+        // navigate("/auth/login", { replace: true });
     };
+    const content = (
+        <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
+            <Title level={5}>
+                {/* {user.name} */}
+            </Title>
+            {/* <Text>{user.position}</Text> */}
+            <Button danger onClick={handleLogout}>
+                {/* Logout */}
+            </Button>
+        </Space>
+    );
 
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
+
+    const menuIconStyle = { color: "#1890ff" };
+    const { pathname } = useLocation();
+    let selectedKey;
+    switch (pathname) {
+        case "/admin/show-menu": selectedKey = "MenuList";
+            break;
+        case "/admin/create-menu": selectedKey = "AddNewMenu";
+            break;
+
+        default: selectedKey = "Dashboard";
+    }
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open} style={{ background: "var(--primary-color)" }}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
+        <Layout>
+            <Header
+                style={{ paddingTop: "13px", backgroundColor: "var(--primary-color)" }}
+            >
+                <Button
+                    style={{
+                        float: "left",
+                        backgroundColor: "var(--primary-color)",
+                        color: "var(--white-color)",
+                        marginRight: "3px",
+                    }}
+                    onClick={() => setCollapsed(!collapsed)}
+                >
+                    {React.createElement(
+                        collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                        {style: {color: "#ffffff"}},
+                    )}
+                </Button>
+                <Popover
+                    placement="bottom"
+                    content={content}
+                    title={text}
+                    trigger="click"
+                    
+                >
+                    <Avatar
+                        style={{ float: "right", backgroundColor: "var(--primary-color)" }}
+                        icon={<UserOutlined />}
+                        size="large"
+
+                    />
+                </Popover>
+                <Title style={{ color: "#ffffff" }} level={3}>
+                    HotelHub
+                </Title>
+            </Header>
+            <Layout>
+                <Sider
+                    collapsed={collapsed}
+                    style={{ backgroundColor: "var(--white-color)" }}
+                >
+                    <Menu mode="inline" defaultSelectedKeys={[selectedKey]}>
+                        <Menu.Item key="MenuList" icon={<BarsOutlined style={menuIconStyle}/>}>
+                            <Link to="/admin/show-menu">Menu List</Link>
+                        </Menu.Item>
+                        <Menu.Item key="AddNewMenu" icon={<PlusOutlined style={menuIconStyle}/>}>
+                            <Link to="/admin/create-menu">Add New Menu</Link>
+                        </Menu.Item>
+                    </Menu>
+                </Sider>
+                <Layout>
+                    <Content style={{ minHeight: "520px" }}>
+                        <Routes>
+                            <Route path="show-menu" element={<Availability />} />
+                            <Route path="create-menu" element={<Availability />} />
+                        </Routes>
+                    </Content>
+                    <Footer
+                        style={{
+                            backgroundColor: "var(--white-color)",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            color: "var(--primary-color)",
                         }}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <RoofingIcon onClick={() => navigate("/")} />
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ color: "white" }}
-                        onClick={() => navigate("/")}
-                        m={1}
-                    >
-                        HotelHUB
-                    </Typography>
 
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
-                </DrawerHeader>
-                <Divider />
-
-                <List>
-                    
-                       
-                        <ListItem key={1} disablePadding sx={{ display: 'block' }}>
-                           
-                                <ListItemButton
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
-                                    
-                                >
-                                    <ListItemIcon
-                                        sx={{
-                                            minWidth: 0,
-                                            mr: open ? 3 : 'auto',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                     <FormatListBulletedIcon/>
-                                    </ListItemIcon>
-                                    <ListItemText primary="Menu List" sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                        </ListItem>
-                        
-                  
-
-
-                </List>
-            </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 , minHeight:"520px", backgroundColor:"red" }}>
-               
-                <Routes>
-                    <Route path="/admin/show-menu" element={<Availability/>} />
-                </Routes>
-
-            </Box>
-        </Box>
+                    </Footer>
+                </Layout>
+            </Layout>
+        </Layout>
     );
-}
+};
+
+export default Admin;

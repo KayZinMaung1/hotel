@@ -1,5 +1,6 @@
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Availability from "./components/show_hotel_details/Availability";
 import Home from "./pages/Home";
 import Admin from "./pages/hotel_owner/Admin";
 import Login from "./pages/hotel_owner/Login";
