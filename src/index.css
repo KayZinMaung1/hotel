@@ -17,3 +17,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-upload-list-picture-card-container {
+  width: 180px !important;
+  height: 180px !important;
+
+}
+
+.ant-upload{
+  width: 180px !important ;
+  height: 180px !important;
+}

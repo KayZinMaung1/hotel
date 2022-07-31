@@ -5,17 +5,15 @@ import {
   Row,
   Col,
   Table,
-  Spin,
   Popconfirm,
   Button,
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
-  EditOutlined,
-  DeleteOutlined,
+
   PlusSquareOutlined,
 } from "@ant-design/icons";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';

@@ -51,7 +51,7 @@ const CreateMenu = () => {
                 <Input
                   placeholder="Enter type"
                   style={{ borderRadius: "10px" }}
-                  size="medi"
+                  size="medium"
                 />
               </Form.Item>
               <Form.Item
@@ -67,7 +67,7 @@ const CreateMenu = () => {
                 <Input
                   placeholder="Enter sleeps"
                   style={{ borderRadius: "10px" }}
-                  size="medi"
+                  size="medium"
                 />
               </Form.Item>
               <Form.Item
@@ -83,7 +83,7 @@ const CreateMenu = () => {
                 <Input
                   placeholder="Enter price"
                   style={{ borderRadius: "10px" }}
-                  size="medi"
+                  size="medium"
                 />
               </Form.Item>
 
@@ -94,7 +94,7 @@ const CreateMenu = () => {
                     color: "var(--white-color)",
                     borderRadius: "10px",
                   }}
-                  size="medi"
+                  size="medium"
                   htmlType="submit"
                 >
                  <SaveOutlined/>
