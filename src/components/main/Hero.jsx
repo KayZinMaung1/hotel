@@ -31,7 +31,7 @@ const Hero = () => {
             “Let's Find a Hotel that's perfect for you.”
           </Typography>
           <Box my={4}>
-            <a href="#showHotels" style={{textDecoration: 'none'}}> <OutlinedButton text="View More" onClick={() => {}} /></a>
+            <a href="#hotels" style={{textDecoration: 'none'}}> <OutlinedButton text="Find Out" onClick={() => {}} /></a>
           </Box>
         </Stack>
       </StyledBox>
