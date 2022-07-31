@@ -9,6 +9,7 @@ import Slide from "@mui/material/Slide";
 import { useNavigate } from "react-router-dom";
 import RoofingIcon from "@mui/icons-material/Roofing";
 import AboutHotel from "../../components/show_hotel_details/AboutHotel";
+import StickyHeadTable from "../../components/show_hotel_details/Availability";
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -52,6 +53,8 @@ export default function ShowHotelDetails(props) {
         </AppBar>
       </HideOnScroll>
       <AboutHotel/>
+
+      <StickyHeadTable/>
     </React.Fragment>
   );
 }

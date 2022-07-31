@@ -32,7 +32,6 @@ const AboutHotel = ()=>{
       spacing={2}
       sx={{ mt: "10px" }}
       justifyContent="space-evenly"
-      
     >
       <Grid item >
         <Stack spacing={1}>
@@ -63,6 +62,7 @@ const AboutHotel = ()=>{
                   key={index}
                   width="500px"
                   height="350px"
+                  alt="room"
                 ></img>
               ))}
             </Carousel>
