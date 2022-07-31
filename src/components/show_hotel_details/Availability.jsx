@@ -73,7 +73,7 @@ const data = [
 
 ]
 
-export default function StickyHeadTable() {
+export default function Availability() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
