@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // ant design styles
-import { Layout, Menu, Avatar, Space, Popover, Button, Typography } from "antd";
+import { Layout, Menu, Avatar, Space, Popover, Button, Typography, message } from "antd";
 import "antd/dist/antd.css";
 import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +20,7 @@ import CreateMenu from "./menu/CreateMenu";
 import EditMenu from "./menu/EditMenu";
 import CreateHotelProfile from "./CreateHotelProfile";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-
-
+import { loginSuccess } from "../../utils/messages";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -49,6 +48,8 @@ const Admin = () => {
   const handleLogout = () => {
     signOut(auth);
   };
+
+  console.log("User:", user)
   const content = (
     <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
       <Title level={5}>Maung Maung</Title>
@@ -75,7 +76,24 @@ const Admin = () => {
     default:
       selectedKey = "Dashboard";
   }
- console.log("render");
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+       setUser(user);
+      } else {
+        // navigate("/login");
+      }
+    });
+  },[auth, navigate, user])
+  
+ 
+  useEffect(() => {
+    if (user) {
+      message.success(loginSuccess);
+      navigate("/admin");
+    }
+    return () => user;
+  }, [user, navigate]);
   return (
     <Layout>
       <Header

@@ -56,9 +56,8 @@ function Register() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
        setUser(user);
-       navigate("/admin");
       } else {
-        navigate("/login");
+        // navigate("/login");
       }
     });
   },[auth, navigate, user])
@@ -67,10 +66,11 @@ function Register() {
   useEffect(() => {
     if (user) {
       message.success(registerSuccess);
+      navigate("/admin");
     }
     return () => user;
-  }, [user]);
- 
+  }, [user, navigate]);
+
   return (
     <React.Fragment>
       <Appbar />
