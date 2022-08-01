@@ -17,7 +17,7 @@ import { registerWithEmailAndPassword } from "../../actions/auth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { registerSuccess } from "../../utils/messages";
-import {message} from "antd";
+import { message } from "antd";
 
 const StyledContainedButton = styled(Button)(({ theme }) => ({
   backgroundColor: "var(--primary-color)",
@@ -29,7 +29,6 @@ const StyledContainedButton = styled(Button)(({ theme }) => ({
     backgroundColor: "transparent",
   },
 }));
-
 
 const Image = styled(Paper)(({ theme }) => ({
   height: "80vh",
@@ -55,16 +54,14 @@ function Register() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-       setUser(user);
-      } else {
-        // navigate("/login");
+        setUser(user);
       }
     });
-  },[auth, navigate, user])
-  
- 
+  }, [auth, navigate, user]);
+
   useEffect(() => {
     if (user) {
+      //success register
       message.success(registerSuccess);
       navigate("/admin");
     }
@@ -75,7 +72,11 @@ function Register() {
     <React.Fragment>
       <Appbar />
       <Box sx={{ width: "70%" }} position="absolute" left="15%" top="3%">
-        <Typography component="h1" variant="h4" sx={{ color: "var(--primary-color)", m: "10px" }}>
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ color: "var(--primary-color)", m: "10px" }}
+        >
           HotelHUB
         </Typography>
         <Paper sx={{ width: "100%" }} alignItems="center" elevation={2}>
@@ -99,7 +100,11 @@ function Register() {
                 }}
               >
                 <Stack spacing={2}>
-                  <Typography level="h4" component="h1" sx={{ color: "var(--primary-color)" }}>
+                  <Typography
+                    level="h4"
+                    component="h1"
+                    sx={{ color: "var(--primary-color)" }}
+                  >
                     <b>Welcome!</b>
                   </Typography>
                   <Typography level="body2" fontSize={14} fontWeight={100}>
@@ -129,13 +134,14 @@ function Register() {
                     label="Password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <StyledContainedButton size="large" variant="contained" onClick={handleRegister}>
+                  <StyledContainedButton
+                    size="large"
+                    variant="contained"
+                    onClick={handleRegister}
+                  >
                     Register
                   </StyledContainedButton>
-                  <Typography
-                    fontSize="sm"
-                    sx={{ alignSelf: "center" }}
-                  >
+                  <Typography fontSize="sm" sx={{ alignSelf: "center" }}>
                     Already have an account? <Link to="/login">Login</Link>
                   </Typography>
                 </Stack>
@@ -145,7 +151,6 @@ function Register() {
         </Paper>
       </Box>
     </React.Fragment>
-
   );
 }
 
