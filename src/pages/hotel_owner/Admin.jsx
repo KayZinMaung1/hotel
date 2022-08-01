@@ -4,6 +4,8 @@ import { Layout, Menu, Avatar, Space, Popover, Button, Typography, message } fro
 import "antd/dist/antd.css";
 import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { db } from "../../actions/auth";
+import { query, collection, getDocs, where } from "firebase/firestore";
 
 // ant design icons
 import {
@@ -44,6 +46,23 @@ const Admin = () => {
       }
     });
   },[auth, navigate, user])
+
+  const fetchUserName = async () => {
+    try {
+      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const doc = await getDocs(q);
+      const data = doc.docs[0].data();
+
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+      // alert("An error occured while fetching user data");
+    }
+  };
+
+  useEffect(() => {
+    fetchUserName();
+  }, [user]);
 
   const handleLogout = () => {
     signOut(auth);
