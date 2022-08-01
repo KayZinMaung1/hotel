@@ -7,11 +7,15 @@ import {
   Stack,
   Grid,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import login from "../../assets/images/login.jpg";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Appbar from "../../components/AppBar";
+import { loginSuccess } from "../../utils/messages";
+import { logInWithEmailAndPassword } from "../../actions/auth";
+import {message} from "antd";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const StyledContainedButton = styled(Button)(({ theme }) => ({
   backgroundColor: "var(--primary-color)",
@@ -35,6 +39,32 @@ const Image = styled(Paper)(({ theme }) => ({
 
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = getAuth();
+  const [user, setUser] = useState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
+  }, [auth, user]);
+
+  useEffect(() => {
+    if (user) {
+      //success login
+      message.success(loginSuccess);
+      navigate("/admin");
+    }
+    return () => user;
+  }, [user, navigate]);
+
+  const handleLogin = () => {
+    logInWithEmailAndPassword(email, password);
+  };
   return (
     <React.Fragment>
       <Appbar />
@@ -75,6 +105,7 @@ function Login() {
                     type="email"
                     placeholder="johndoe@email.com"
                     label="Email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
                     required
@@ -82,8 +113,9 @@ function Login() {
                     type="password"
                     placeholder="password"
                     label="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
-                  <StyledContainedButton size="large" variant="contained">
+                  <StyledContainedButton size="large" variant="contained" onClick={handleLogin}>
                     Login
                   </StyledContainedButton>
                   <Typography

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 // ant design styles
-import { Layout, Menu, Avatar, Space, Popover, Button, Typography, message } from "antd";
+import { Layout, Menu, Avatar, Space, Popover, Button, Typography } from "antd";
 import "antd/dist/antd.css";
 import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../actions/auth";
-import { query, collection, getDocs, where } from "firebase/firestore";
+
 
 // ant design icons
 import {
@@ -22,7 +22,7 @@ import CreateMenu from "./menu/CreateMenu";
 import EditMenu from "./menu/EditMenu";
 import CreateHotelProfile from "./CreateHotelProfile";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { loginSuccess } from "../../utils/messages";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -35,43 +35,43 @@ const text = (
 const Admin = () => {
   const [collapsed, setCollapsed] = useState(false);
   const auth = getAuth();
+  const [name, setName] = useState("");
+  const navigate = useNavigate("");
   const [user, setUser] = useState();
-  const navigate = useNavigate();
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-       setUser(user);
-      } else {
-        navigate("/login");
-      }
-    });
-  },[auth, navigate, user])
-
   const fetchUserName = async () => {
     try {
       const q = query(collection(db, "users"), where("uid", "==", user?.uid));
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
-
-      console.log(data);
+      setName(data.name);
     } catch (err) {
       console.error(err);
-      // alert("An error occured while fetching user data");
     }
   };
-
   useEffect(() => {
-    fetchUserName();
-  }, [user]);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        navigate("/login");
+      }
+    });
+  },[auth, navigate])
 
+  useEffect(()=>{
+    if(user){
+      fetchUserName();
+    }
+  })
+
+console.log("UserName", name)
   const handleLogout = () => {
     signOut(auth);
   };
 
-  console.log("User:", user)
   const content = (
     <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
-      <Title level={5}>Maung Maung</Title>
+      <Title level={5}>{name}</Title>
       <Button danger onClick={handleLogout} size="small">
         Logout
       </Button>
@@ -95,24 +95,8 @@ const Admin = () => {
     default:
       selectedKey = "Dashboard";
   }
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-       setUser(user);
-      } else {
-        // navigate("/login");
-      }
-    });
-  },[auth, navigate, user])
-  
+
  
-  useEffect(() => {
-    if (user) {
-      message.success(loginSuccess);
-      navigate("/admin");
-    }
-    return () => user;
-  }, [user, navigate]);
   return (
     <Layout>
       <Header

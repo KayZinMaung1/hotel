@@ -56,6 +56,7 @@ const logout = () => {
   signOut(auth);
 };
 
+
 export {
   auth,
   db,

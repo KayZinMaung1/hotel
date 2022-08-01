@@ -57,7 +57,7 @@ function Register() {
         setUser(user);
       }
     });
-  }, [auth, navigate, user]);
+  }, [auth, user]);
 
   useEffect(() => {
     if (user) {
