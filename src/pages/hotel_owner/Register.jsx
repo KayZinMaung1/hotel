@@ -7,11 +7,17 @@ import {
   Stack,
   Grid,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import register from "../../assets/images/register.jpg";
-import React from "react";
+import { useState } from "react";
 import Appbar from "../../components/AppBar";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { registerWithEmailAndPassword } from "../../actions/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { registerSuccess } from "../../utils/messages";
+import {message} from "antd";
 
 const StyledContainedButton = styled(Button)(({ theme }) => ({
   backgroundColor: "var(--primary-color)",
@@ -34,6 +40,37 @@ const Image = styled(Paper)(({ theme }) => ({
 }));
 
 function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const [user, setUser] = useState();
+
+  const handleRegister = () => {
+    if (!name) alert("Please enter name");
+    registerWithEmailAndPassword(name, email, password);
+  };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+       setUser(user);
+       navigate("/admin");
+      } else {
+        navigate("/login");
+      }
+    });
+  },[auth, navigate, user])
+  
+ 
+  useEffect(() => {
+    if (user) {
+      message.success(registerSuccess);
+    }
+    return () => user;
+  }, [user]);
+ 
   return (
     <React.Fragment>
       <Appbar />
@@ -74,6 +111,7 @@ function Register() {
                     type="text"
                     placeholder="My Hotel"
                     label="Hotel Name"
+                    onChange={(e) => setName(e.target.value)}
                   />
                   <TextField
                     required
@@ -81,6 +119,7 @@ function Register() {
                     type="email"
                     placeholder="johndoe@email.com"
                     label="Email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
                     required
@@ -88,8 +127,9 @@ function Register() {
                     type="password"
                     placeholder="password"
                     label="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
-                  <StyledContainedButton size="large" variant="contained">
+                  <StyledContainedButton size="large" variant="contained" onClick={handleRegister}>
                     Register
                   </StyledContainedButton>
                   <Typography

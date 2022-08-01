@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // ant design styles
 import { Layout, Menu, Avatar, Space, Popover, Button, Typography } from "antd";
 import "antd/dist/antd.css";
 import { Link, Routes, Route, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // ant design icons
 import {
@@ -18,6 +19,9 @@ import ShowMenu from "./menu/ShowMenu";
 import CreateMenu from "./menu/CreateMenu";
 import EditMenu from "./menu/EditMenu";
 import CreateHotelProfile from "./CreateHotelProfile";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -29,10 +33,21 @@ const text = (
 
 const Admin = () => {
   const [collapsed, setCollapsed] = useState(false);
-//   const navigate = useNavigate();
+  const auth = getAuth();
+  const [user, setUser] = useState();
+  const navigate = useNavigate();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+       setUser(user);
+      } else {
+        navigate("/login");
+      }
+    });
+  },[auth, navigate, user])
+
   const handleLogout = () => {
-    // dispatch(logout());
-    // navigate("/auth/login", { replace: true });
+    signOut(auth);
   };
   const content = (
     <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
@@ -60,7 +75,7 @@ const Admin = () => {
     default:
       selectedKey = "Dashboard";
   }
-
+ console.log("render");
   return (
     <Layout>
       <Header
