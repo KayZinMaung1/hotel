@@ -1,7 +1,18 @@
 import React from "react";
-import { Form, Typography, Space, Row, Col, Input, Button } from "antd";
+import {
+  Form,
+  Typography,
+  Space,
+  Row,
+  Col,
+  Input,
+  Button,
+  InputNumber,
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import { SaveOutlined } from "@ant-design/icons";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../firebase";
 
 const { Title } = Typography;
 
@@ -9,7 +20,8 @@ const CreateMenu = () => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    // await dispatch(createExpenseName(values));
+    console.log("values: ", values);
+    //need auth user's hotelId //useEffect
   };
 
   return (
@@ -18,7 +30,7 @@ const CreateMenu = () => {
         <Title level={3}>Add New Menu</Title>
 
         <Row>
-          <Col lg={{span: 8}} sm={{span: 24}}>
+          <Col lg={{ span: 8 }} sm={{ span: 24 }}>
             <Form
               colon={false}
               labelCol={{
@@ -51,7 +63,7 @@ const CreateMenu = () => {
                 <Input
                   placeholder="Enter type"
                   style={{ borderRadius: "10px" }}
-                  size="medium"
+                  size="large"
                 />
               </Form.Item>
               <Form.Item
@@ -64,10 +76,10 @@ const CreateMenu = () => {
                   },
                 ]}
               >
-                <Input
+                <InputNumber
                   placeholder="Enter sleeps"
-                  style={{ borderRadius: "10px" }}
-                  size="medium"
+                  style={{ borderRadius: "10px", width: "100%" }}
+                  size="large"
                 />
               </Form.Item>
               <Form.Item
@@ -80,10 +92,10 @@ const CreateMenu = () => {
                   },
                 ]}
               >
-                <Input
+                <InputNumber
                   placeholder="Enter price"
-                  style={{ borderRadius: "10px" }}
-                  size="medium"
+                  style={{ borderRadius: "10px", width: "100%" }}
+                  size="large"
                 />
               </Form.Item>
 
@@ -94,17 +106,15 @@ const CreateMenu = () => {
                     color: "var(--white-color)",
                     borderRadius: "10px",
                   }}
-                  size="medium"
+                  size="large"
                   htmlType="submit"
                 >
-                 <SaveOutlined/>
-                 Save
+                  <SaveOutlined />
+                  Save
                 </Button>
               </Form.Item>
             </Form>
           </Col>
-
-          
         </Row>
       </Space>
     </Layout>
