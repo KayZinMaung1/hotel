@@ -6,6 +6,7 @@ import {
   Box,
   Stack,
   Grid,
+  Container,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
@@ -14,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import Appbar from "../../components/AppBar";
 import { loginSuccess } from "../../utils/messages";
 import { logInWithEmailAndPassword } from "../../actions/auth";
-import {message} from "antd";
+import { message } from "antd";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const StyledContainedButton = styled(Button)(({ theme }) => ({
@@ -28,7 +29,6 @@ const StyledContainedButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-
 const Image = styled(Paper)(({ theme }) => ({
   height: "80vh",
   position: "relative",
@@ -36,7 +36,6 @@ const Image = styled(Paper)(({ theme }) => ({
   backgroundSize: "cover",
   backgroundPosition: "center",
 }));
-
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -66,13 +65,30 @@ function Login() {
     logInWithEmailAndPassword(email, password);
   };
   return (
-    <React.Fragment>
+    <Container
+      style={{
+        marginTop: "6%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      xs={10}
+    >
       <Appbar />
-      <Box sx={{ width: "70%" }} position="absolute" left="15%" top="3%">
-        <Typography component="h1" variant="h4" sx={{ color: "var(--primary-color)", m: "10px" }}>
+      <Box
+        sx={{
+          width: "70%",
+          height: "70%",
+        }}
+      >
+        {/* <Typography
+          component="h1"
+          variant="h4"
+          sx={{ color: "var(--primary-color)", m: "10px" }}
+        >
           HotelHUB
-        </Typography>
-        <Paper sx={{ width: "100%" }} alignItems="center" elevation={2}>
+        </Typography> */}
+        <Paper sx={{ width: "100%", alignItems: "center" }} elevation={2}>
           <Grid container>
             <Grid item md={6}>
               <Image />
@@ -93,7 +109,11 @@ function Login() {
                 }}
               >
                 <Stack spacing={2}>
-                  <Typography level="h4" component="h1" sx={{ color: "var(--primary-color)" }}>
+                  <Typography
+                    level="h4"
+                    component="h1"
+                    sx={{ color: "var(--primary-color)" }}
+                  >
                     <b>Welcome!</b>
                   </Typography>
                   <Typography level="body2" fontSize={14} fontWeight={100}>
@@ -115,13 +135,14 @@ function Login() {
                     label="Password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <StyledContainedButton size="large" variant="contained" onClick={handleLogin}>
+                  <StyledContainedButton
+                    size="large"
+                    variant="contained"
+                    onClick={handleLogin}
+                  >
                     Login
                   </StyledContainedButton>
-                  <Typography
-                    fontSize="sm"
-                    sx={{ alignSelf: "center" }}
-                  >
+                  <Typography fontSize="sm" sx={{ alignSelf: "center" }}>
                     Don't have an account? <Link to="/register">Register</Link>
                   </Typography>
                 </Stack>
@@ -130,7 +151,7 @@ function Login() {
           </Grid>
         </Paper>
       </Box>
-    </React.Fragment>
+    </Container>
   );
 }
 

@@ -1,9 +1,24 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  createTheme,
+  Grid,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import MultiActionAreaCard from "../MultiActionAreaCard";
 import hotel1 from "../../assets/images/hotel1.jpg";
 import hotel2 from "../../assets/images/hotel2.jpg";
 import hotel3 from "../../assets/images/hotel3.jpg";
 import { useNavigate } from "react-router-dom";
+
+const theme = createTheme();
+const StyledTypography = styled(Typography)(() => ({
+  [theme.breakpoints.down("md")]: {
+    fontSize: 26,
+  },
+}));
+
 const ShowHotels = () => {
   const navigate = useNavigate();
   const hotels = [
@@ -33,13 +48,13 @@ const ShowHotels = () => {
     <Box sx={{ height: "100vh" }} id="hotels">
       <Stack alignItems="center" spacing={2} my={10}>
         <Box mb={2}>
-          <Typography
+          <StyledTypography
             component="h1"
             variant="h4"
             sx={{ color: "var(--primary-color)" }}
           >
             “Every day brings new choices”
-          </Typography>
+          </StyledTypography>
         </Box>
 
         <Grid container justifyContent="space-evenly">
@@ -49,7 +64,9 @@ const ShowHotels = () => {
                 image={hotel.image}
                 title={hotel.title}
                 description={hotel.description}
-                onClick={()=>{navigate(`/hotels/${hotel.id}`)}}
+                onClick={() => {
+                  navigate(`/hotels/${hotel.id}`);
+                }}
               />
             </Grid>
           ))}
