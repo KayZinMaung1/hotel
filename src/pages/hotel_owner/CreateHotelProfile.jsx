@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Typography, Space, Button, Form } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { SaveOutlined } from "@ant-design/icons";
@@ -6,18 +6,21 @@ import UploadImages from "./UploadImages";
 import TextArea from "antd/lib/input/TextArea";
 const { Title } = Typography;
 
+
 const CreateHotelProfile = () => {
   const [form] = Form.useForm();
+  const [imageList, setImageList] = useState([]);
 
   const onFinish = async (values) => {
     // await dispatch(createExpenseName(values));
   };
+  console.log("ImageList:", imageList)
 
   return (
     <Layout style={{ margin: "20px 40px" }}>
       <Space direction="vertical" size="middle">
         <Title level={4}>Upload Photos</Title>
-        <UploadImages />
+        <UploadImages imageList={imageList} setImageList={setImageList}/>
         <Title level={4}>Add Description</Title>
         <Form
           colon={false}

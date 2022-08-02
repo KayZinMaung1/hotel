@@ -4,8 +4,6 @@ import { Layout, Menu, Avatar, Space, Popover, Button, Typography } from "antd";
 import "antd/dist/antd.css";
 import { Link, Routes, Route, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { db } from "../../actions/auth";
-
 
 // ant design icons
 import {
@@ -23,6 +21,7 @@ import EditMenu from "./menu/EditMenu";
 import CreateHotelProfile from "./CreateHotelProfile";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
