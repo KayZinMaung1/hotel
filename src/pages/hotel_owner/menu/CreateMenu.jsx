@@ -61,7 +61,7 @@ const CreateMenu = () => {
       hotelId
     }
     try {
-      const docRef = await addDoc(collection(db, "menu"), data);
+      await addDoc(collection(db, "menu"), data);
       message.success(createSuccess);
       form.resetFields();
     } catch (e) {

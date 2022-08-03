@@ -4,7 +4,7 @@ import Layout from "antd/lib/layout/layout";
 import { SaveOutlined } from "@ant-design/icons";
 import UploadImages from "./UploadImages";
 import TextArea from "antd/lib/input/TextArea";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { createSuccess } from "../../utils/messages";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -16,7 +16,7 @@ const CreateHotelProfile = () => {
   const [form] = Form.useForm();
   const [imageList, setImageList] = useState([]);
   const [uid, setUid] = useState();
-  const [user, setUser] = useState();
+  const [user] = useState();
   const auth = getAuth();
   
   useEffect(() => {
@@ -37,7 +37,7 @@ const CreateHotelProfile = () => {
     };
 
     try {
-      const docRef = await addDoc(collection(db, "hotels"), data);
+      await addDoc(collection(db, "hotels"), data);
       message.success(createSuccess);
     } catch (e) {
       console.error("Error adding document: ", e);
