@@ -41,14 +41,14 @@ const Image = styled(Paper)(({ theme }) => ({
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
   const navigate = useNavigate();
   const auth = getAuth();
   const [user, setUser] = useState();
 
   const handleRegister = () => {
-    if (!name) alert("Please enter name");
-    registerWithEmailAndPassword(name, email, password);
+    // if (!name) alert("Please enter name");
+    registerWithEmailAndPassword(email, password);
   };
 
   useEffect(() => {
@@ -115,14 +115,14 @@ function Register() {
                   <Typography level="body2" fontSize={14} fontWeight={100}>
                     Create an account
                   </Typography>
-                  <TextField
+                  {/* <TextField
                     required
                     name="name"
                     type="text"
                     placeholder="My Hotel"
                     label="Hotel Name"
                     onChange={(e) => setName(e.target.value)}
-                  />
+                  /> */}
                   <TextField
                     required
                     name="email"

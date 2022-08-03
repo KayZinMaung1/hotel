@@ -22,6 +22,7 @@ import CreateHotelProfile from "./CreateHotelProfile";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
+import ShowHotelDetails from "../traveller/ShowHotelDetails";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -127,7 +128,7 @@ console.log("UserName", name)
             size="large"
           />
         </Popover>
-        <Title style={{ color: "#ffffff" }} level={3}>
+        <Title style={{ color: "#ffffff" }} level={3} onClick={()=>navigate("/")}>
           HotelHub
         </Title>
       </Header>
@@ -153,7 +154,7 @@ console.log("UserName", name)
               key="BuildHotelProfile"
               icon={<AppstoreAddOutlined style={menuIconStyle}/> }
             >
-              <Link to="/admin/create-hotel-profile">Build Hotel Profile</Link>
+              <Link to="/admin/create-hotel-profile">Hotel Profile</Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -163,6 +164,7 @@ console.log("UserName", name)
               <Route path="show-menu" element={<ShowMenu />} />
               <Route path="create-menu" element={<CreateMenu />} />
               <Route path="edit-menu/:id" element={<EditMenu />} />
+              <Route path="hotels/:id" element={<ShowHotelDetails />} />
               <Route
                 path="create-hotel-profile"
                 element={<CreateHotelProfile />}

@@ -52,7 +52,7 @@ const CreateMenu = () => {
     try {
       const q = query(collection(db, "hotels"), where("uid", "==", userId));
       const doc = await getDocs(q);
-      const id = doc.docs[0].id;
+      const id = doc.docs[0]?.id;
       setHotelId(id);
     } catch (err) {
       console.error(err);
@@ -61,19 +61,20 @@ const CreateMenu = () => {
 
 
   const onFinish = async (values) => {
-
+    setLoading(true);
     const data = {
       ...values,
       hotelId,
       userId
     }
     try {
-      setLoading(true);
+     
       await addDoc(collection(db, "menu"), data);
       message.success(createSuccess);
       form.resetFields();
     } catch (e) {
       console.error("Error adding document: ", e);
+      message.error("Please, create your hotel profile first!")
     }
     setLoading(false);
   };

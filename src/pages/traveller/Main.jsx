@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import Hero from "../../components/main/Hero";
 import ShowHotels from "../../components/main/ShowHotels";
 import RoofingIcon from "@mui/icons-material/Roofing";
+import { collection, getDocs, query } from "firebase/firestore";
+import { db } from "../../firebase";
+import {useState, useEffect} from "react";
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -29,8 +32,38 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 };
 
-export default function Main(props) {
+
+const  Main = (props)=> {
   const navigate = useNavigate();
+  const [hotels, setHotels ] = useState([]);
+
+  useEffect(()=>{
+   fetchHotels();
+  },[])
+
+  console.log("Hotels: ", hotels)
+
+  const fetchHotels = async() => {
+    try {
+      let newData = [];
+      const q = query(collection(db, "hotels"));
+      const querySnapshot  = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        let transformedData = {
+          ...doc.data(),
+          id: doc.id,
+          key: doc.id
+        };
+        newData = [...newData, transformedData];
+      });
+      setHotels(newData);
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
+
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -51,7 +84,8 @@ export default function Main(props) {
         </AppBar>
       </HideOnScroll>
       <Hero />
-      <ShowHotels />
+      <ShowHotels hotels={hotels}/>
     </React.Fragment>
   );
 }
+export default Main;

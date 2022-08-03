@@ -8,6 +8,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { Box, Stack } from "@mui/material";
+import { useEffect } from "react";
+import { collection, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const columns = [
   { id: "type", label: "Room Type", minWidth: 170 },
@@ -21,58 +24,59 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    id: 1,
-    type: "Superior Twin Room",
-    sleeps: 2,
-    price: 148221,
-  },
-  {
-    id: 2,
-    type: "superior King Room",
-    sleeps: 2,
-    price: 155043,
-  },
-  {
-    id: 3,
-    type: "Deluxe Suite",
-    sleeps: 2,
-    price: 356599,
-  },
-  {
-    id: 4,
-    type: "Deluxe King Room ",
-    sleeps: 2,
-    price: 170547,
-  },
-  {
-    id: 5,
-    type: "Superior Twin Room",
-    sleeps: 2,
-    price: 148221,
-  },
-  {
-    id: 6,
-    type: "superior King Room",
-    sleeps: 2,
-    price: 155043,
-  },
-  {
-    id: 7,
-    type: "Deluxe Suite",
-    sleeps: 2,
-    price: 356599,
-  },
-  {
-    id: 8,
-    type: "Deluxe King Room ",
-    sleeps: 2,
-    price: 170547,
-  },
-];
+// const data = [
+//   {
+//     id: 1,
+//     type: "Superior Twin Room",
+//     sleeps: 2,
+//     price: 148221,
+//   },
+//   {
+//     id: 2,
+//     type: "superior King Room",
+//     sleeps: 2,
+//     price: 155043,
+//   },
+//   {
+//     id: 3,
+//     type: "Deluxe Suite",
+//     sleeps: 2,
+//     price: 356599,
+//   },
+//   {
+//     id: 4,
+//     type: "Deluxe King Room ",
+//     sleeps: 2,
+//     price: 170547,
+//   },
+//   {
+//     id: 5,
+//     type: "Superior Twin Room",
+//     sleeps: 2,
+//     price: 148221,
+//   },
+//   {
+//     id: 6,
+//     type: "superior King Room",
+//     sleeps: 2,
+//     price: 155043,
+//   },
+//   {
+//     id: 7,
+//     type: "Deluxe Suite",
+//     sleeps: 2,
+//     price: 356599,
+//   },
+//   {
+//     id: 8,
+//     type: "Deluxe King Room ",
+//     sleeps: 2,
+//     price: 170547,
+//   },
+// ];
 
-export default function Availability() {
+
+const Availability= ({menu}) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -84,6 +88,8 @@ export default function Availability() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  console.log("Menu of hotel: ", menu)
 
   return (
     <Box sx={{ p: "10%" }}>
@@ -105,7 +111,7 @@ export default function Availability() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data
+                {menu
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
                     return (
@@ -134,7 +140,7 @@ export default function Availability() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={data.length}
+            count={menu.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -145,3 +151,5 @@ export default function Availability() {
     </Box>
   );
 }
+
+export default Availability;

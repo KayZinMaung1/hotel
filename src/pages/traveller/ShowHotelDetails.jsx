@@ -10,7 +10,11 @@ import { useNavigate } from "react-router-dom";
 import RoofingIcon from "@mui/icons-material/Roofing";
 import AboutHotel from "../../components/show_hotel_details/AboutHotel";
 import Availability from "../../components/show_hotel_details/Availability";
-
+import {useCallback} from "react";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+import {useParams} from "react-router-dom";
+import {useState, useEffect} from "react";
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({
@@ -31,8 +35,53 @@ HideOnScroll.propTypes = {
 
 
 
-export default function ShowHotelDetails(props) {
+const ShowHotelDetails= (props)=> {
   const navigate = useNavigate();
+  const params = useParams();
+  const id = params.id;
+  const [hotel, setHotel] = useState();
+  const [menu, setMenu] = useState([]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const docRef = doc(db, "hotels", id);
+      const docSnap = await getDoc(docRef);
+      setHotel(docSnap.data());
+    } catch (err) {
+      console.log(err);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData]);
+  // console.log("Hotel Details: ", hotel)
+
+  useEffect(()=>{
+    fetchMenu();
+},[])
+
+const fetchMenu = async() => {
+  try {
+    let newData = [];
+    const q = query(collection(db, "menu"), where("hotelId", "==", id));
+    const querySnapshot  = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      let transformedData = {
+        ...doc.data(),
+        id: doc.id,
+        key: doc.id
+      };
+      newData = [...newData, transformedData];
+    });
+    setMenu(newData);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+console.log("Menu of hotel: ", menu)
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -52,8 +101,9 @@ export default function ShowHotelDetails(props) {
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-      <AboutHotel/>
-      <Availability/>
+      <AboutHotel hotel={hotel}/>
+      <Availability menu={menu}/>
     </React.Fragment>
   );
 }
+export default ShowHotelDetails;

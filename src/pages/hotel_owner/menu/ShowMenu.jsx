@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 const { Title } = Typography;
@@ -29,7 +29,7 @@ const ShowMenu = () => {
   const [user, setUser] = useState();
   
   const handleDelete = async (id) => {
-    // await dispatch(deleteExpenseName(id));
+    await deleteDoc(doc(db, "menu", id));
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const ShowMenu = () => {
     if(user){
       fetchMenu();
     }
-  },[user])
+  },[user, data])
 
   const fetchMenu = async() => {
     try {
@@ -67,7 +67,6 @@ const ShowMenu = () => {
       console.error(err);
     }
   }
-
 
   const columns = [
     {

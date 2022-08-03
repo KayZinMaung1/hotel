@@ -19,31 +19,9 @@ const StyledTypography = styled(Typography)(() => ({
   },
 }));
 
-const ShowHotels = () => {
+const ShowHotels = ({hotels}) => {
   const navigate = useNavigate();
-  const hotels = [
-    {
-      id: 1,
-      image: hotel1,
-      title: "Lizard",
-      description:
-        "Lizards are a widespread group of squamate reptiles, with over 6,00species, ranging across all continents except Antarctica",
-    },
-    {
-      id: 2,
-      image: hotel2,
-      title: "Lizard",
-      description:
-        "Lizards are a widespread group of squamate reptiles, with over 6,000species, ranging across all continents except Antarctica",
-    },
-    {
-      id: 3,
-      image: hotel3,
-      title: "Lizard",
-      description:
-        "Lizards are a widespread group of squamate reptiles, with over 6,000species, ranging across all continents except Antarctica",
-    },
-  ];
+
   return (
     <Box sx={{ height: "100vh" }} id="hotels">
       <Stack alignItems="center" spacing={2} my={10}>
@@ -57,12 +35,12 @@ const ShowHotels = () => {
           </StyledTypography>
         </Box>
 
-        <Grid container justifyContent="space-evenly">
+        <Grid container  spacing={1} sx={{width:"100%", justifyContent:"space-around"}}>
           {hotels.map((hotel) => (
             <Grid item lg={3}>
               <MultiActionAreaCard
-                image={hotel.image}
-                title={hotel.title}
+                image={hotel.imageList[0]}
+                title={hotel.name}
                 description={hotel.description}
                 onClick={() => {
                   navigate(`/hotels/${hotel.id}`);
