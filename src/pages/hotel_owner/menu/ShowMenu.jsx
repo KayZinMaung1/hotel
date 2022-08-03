@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Space,
@@ -17,65 +17,57 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "../../../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 const { Title } = Typography;
 
 const ShowMenu = () => {
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState();
+  const [data, setData] = useState([]);
+  const [user, setUser] = useState();
+  
   const handleDelete = async (id) => {
     // await dispatch(deleteExpenseName(id));
   };
 
-  const data = [
-    {
-      id: 1,
-      type: "Superior Twin Room",
-      sleeps: 2,
-      price: 148221,
-    },
-    {
-      id: 2,
-      type: "superior King Room",
-      sleeps: 2,
-      price: 155043,
-    },
-    {
-      id: 3,
-      type: "Deluxe Suite",
-      sleeps: 2,
-      price: 356599,
-    },
-    {
-      id: 4,
-      type: "Deluxe King Room ",
-      sleeps: 2,
-      price: 170547,
-    },
-    {
-      id: 5,
-      type: "Superior Twin Room",
-      sleeps: 2,
-      price: 148221,
-    },
-    {
-      id: 6,
-      type: "superior King Room",
-      sleeps: 2,
-      price: 155043,
-    },
-    {
-      id: 7,
-      type: "Deluxe Suite",
-      sleeps: 2,
-      price: 356599,
-    },
-    {
-      id: 8,
-      type: "Deluxe King Room ",
-      sleeps: 2,
-      price: 170547,
-    },
-  ];
+  useEffect(() => {
+    onAuthStateChanged(auth, (usr) => {
+      if (usr) {
+        setUser(usr);
+        setUserId(usr.uid);
+      } else {
+        navigate("/login");
+      }
+    });
+  }, [navigate])
+
+  useEffect(()=>{
+    if(user){
+      fetchMenu();
+    }
+  },[user])
+
+  const fetchMenu = async() => {
+    try {
+      let newData = [];
+      const q = query(collection(db, "menu"), where("userId", "==", userId));
+      const querySnapshot  = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        let transformedData = {
+          ...doc.data(),
+          id: doc.id,
+          key: doc.id
+        };
+        newData = [...newData, transformedData];
+      });
+      setData(newData);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   const columns = [
     {
@@ -95,8 +87,8 @@ const ShowMenu = () => {
       dataIndex: "id",
       render: (id) => (
         <Space direction="horizontal">
-          <IconButton sx={{ color: "#389e0d" }} aria-label="edit" size="small" onClick={()=>navigate(`/admin/edit-menu/${id}`)}>
-            <EditIcon fontSize="small"/>
+          <IconButton sx={{ color: "#389e0d" }} aria-label="edit" size="small" onClick={() => navigate(`/admin/edit-menu/${id}`)}>
+            <EditIcon fontSize="small" />
           </IconButton>
           <Popconfirm
             title="Are you sure to delete?"
@@ -107,7 +99,7 @@ const ShowMenu = () => {
             }}
           >
             <IconButton sx={{ color: "red" }} aria-label="delete" size="small">
-              <DeleteIcon fontSize="small"/>
+              <DeleteIcon fontSize="small" />
             </IconButton>
           </Popconfirm>
         </Space>
@@ -130,7 +122,7 @@ const ShowMenu = () => {
                 borderRadius: "5px",
               }}
               size="medium"
-              onClick={() => {navigate("/admin/create-menu")}}
+              onClick={() => { navigate("/admin/create-menu") }}
             >
               {<PlusSquareOutlined />}
               Add New

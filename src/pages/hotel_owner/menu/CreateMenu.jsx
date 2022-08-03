@@ -8,7 +8,8 @@ import {
   Input,
   Button,
   InputNumber,
-  message
+  message,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { SaveOutlined } from "@ant-design/icons";
@@ -24,28 +25,32 @@ const CreateMenu = () => {
   const [user, setUser] = useState();
   const auth = getAuth();
   const [form] = Form.useForm();
-  const [hotelId , setHotelId] = useState();
+  const [hotelId, setHotelId] = useState();
+  const [userId, setUserId] = useState();
   const navigate = useNavigate();
-  
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+        setUserId(user.uid)
       } else {
         navigate("/login");
       }
     });
-  },[auth, navigate])
+  }, [auth, navigate])
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchHotelId();
   })
+
 
   // console.log("Hotel Id: ", hotelId)
 
   const fetchHotelId = async () => {
     try {
-      const q = query(collection(db, "hotels"), where("uid", "==", user?.uid));
+      const q = query(collection(db, "hotels"), where("uid", "==", userId));
       const doc = await getDocs(q);
       const id = doc.docs[0].id;
       setHotelId(id);
@@ -56,113 +61,120 @@ const CreateMenu = () => {
 
 
   const onFinish = async (values) => {
+
     const data = {
       ...values,
-      hotelId
+      hotelId,
+      userId
     }
     try {
+      setLoading(true);
       await addDoc(collection(db, "menu"), data);
       message.success(createSuccess);
       form.resetFields();
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+    setLoading(false);
   };
 
   return (
-    <Layout style={{ margin: "20px 40px" }}>
-      <Space direction="vertical">
-        <Title level={3}>Add New Menu</Title>
+    <Spin spinning={loading}>
+      <Layout style={{ margin: "20px 40px" }}>
+        <Space direction="vertical">
+          <Title level={3}>Add New Menu</Title>
 
-        <Row>
-          <Col lg={{ span: 8 }} sm={{ span: 24 }}>
-            <Form
-              colon={false}
-              labelCol={{
-                xl: {
-                  span: 8,
-                },
-              }}
-              wrapperCol={{
-                xl: {
-                  span: 24,
-                },
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-              form={form}
-              layout={"vertical"}
-            >
-              <Form.Item
-                name="type"
-                label="Type"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter type",
+          <Row>
+            <Col lg={{ span: 8 }} sm={{ span: 24 }}>
+              <Form
+                colon={false}
+                labelCol={{
+                  xl: {
+                    span: 8,
                   },
-                ]}
-              >
-                <Input
-                  placeholder="Enter type"
-                  style={{ borderRadius: "10px" }}
-                  size="large"
-                />
-              </Form.Item>
-              <Form.Item
-                name="sleeps"
-                label="Sleeps"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter sleeps",
+                }}
+                wrapperCol={{
+                  xl: {
+                    span: 24,
                   },
-                ]}
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                onFinish={onFinish}
+                form={form}
+                layout={"vertical"}
               >
-                <InputNumber
-                  placeholder="Enter sleeps"
-                  style={{ borderRadius: "10px", width: "100%" }}
-                  size="large"
-                />
-              </Form.Item>
-              <Form.Item
-                name="price"
-                label="Price"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter price",
-                  },
-                ]}
-              >
-                <InputNumber
-                  placeholder="Enter price"
-                  style={{ borderRadius: "10px", width: "100%" }}
-                  size="large"
-                />
-              </Form.Item>
-
-              <Form.Item style={{ textAlign: "right" }}>
-                <Button
-                  style={{
-                    backgroundColor: "var(--primary-color)",
-                    color: "var(--white-color)",
-                    borderRadius: "10px",
-                  }}
-                  size="large"
-                  htmlType="submit"
+                <Form.Item
+                  name="type"
+                  label="Type"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter type",
+                    },
+                  ]}
                 >
-                  <SaveOutlined />
-                  Save
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-      </Space>
-    </Layout>
+                  <Input
+                    placeholder="Enter type"
+                    style={{ borderRadius: "10px" }}
+                    size="large"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="sleeps"
+                  label="Sleeps"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter sleeps",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    placeholder="Enter sleeps"
+                    style={{ borderRadius: "10px", width: "100%" }}
+                    size="large"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="price"
+                  label="Price"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter price",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    placeholder="Enter price"
+                    style={{ borderRadius: "10px", width: "100%" }}
+                    size="large"
+                  />
+                </Form.Item>
+
+                <Form.Item style={{ textAlign: "right" }}>
+                  <Button
+                    style={{
+                      backgroundColor: "var(--primary-color)",
+                      color: "var(--white-color)",
+                      borderRadius: "10px",
+                    }}
+                    size="large"
+                    htmlType="submit"
+                  >
+                    <SaveOutlined />
+                    Save
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
+        </Space>
+      </Layout>
+    </Spin>
+
   );
 };
 
