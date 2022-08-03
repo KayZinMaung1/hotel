@@ -71,20 +71,25 @@ function Register() {
   return (
     <React.Fragment>
       <Appbar />
-      <Box sx={{ width: "70%" }} position="absolute" left="15%" top="3%">
-        <Typography
+      <Box
+        sx={{ width: "70%", marginTop: "8%" }}
+        position="absolute"
+        left="15%"
+        top="3%"
+      >
+        {/* <Typography
           component="h1"
           variant="h4"
           sx={{ color: "var(--primary-color)", m: "10px" }}
         >
           HotelHUB
-        </Typography>
+        </Typography> */}
         <Paper sx={{ width: "100%" }} alignItems="center" elevation={2}>
           <Grid container>
-            <Grid item md={6}>
+            <Grid item md={6} sm={0} xs={0}>
               <Image />
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} sm={12} xs={12}>
               <Box
                 maxWidth="400"
                 sx={{

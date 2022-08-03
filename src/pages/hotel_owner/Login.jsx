@@ -88,12 +88,15 @@ function Login() {
         >
           HotelHUB
         </Typography> */}
-        <Paper sx={{ width: "100%", alignItems: "center" }} elevation={2}>
+        <Paper
+          sx={{ width: "100%", alignItems: "center", marginTop: "10%" }}
+          elevation={2}
+        >
           <Grid container>
-            <Grid item md={6}>
+            <Grid item md={6} sm={0} xs={0}>
               <Image />
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} sm={12} xs={12}>
               <Box
                 maxWidth="400"
                 sx={{
