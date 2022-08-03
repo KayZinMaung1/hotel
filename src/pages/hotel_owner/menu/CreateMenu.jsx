@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Typography,
@@ -8,20 +8,65 @@ import {
   Input,
   Button,
   InputNumber,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { SaveOutlined } from "@ant-design/icons";
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { createSuccess } from "../../../utils/messages";
 
 const { Title } = Typography;
 
 const CreateMenu = () => {
+  const [user, setUser] = useState();
+  const auth = getAuth();
   const [form] = Form.useForm();
+  const [hotelId , setHotelId] = useState();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        navigate("/login");
+      }
+    });
+  },[auth, navigate])
+
+  useEffect(()=>{
+    fetchHotelId();
+  })
+
+  // console.log("Hotel Id: ", hotelId)
+
+  const fetchHotelId = async () => {
+    try {
+      const q = query(collection(db, "hotels"), where("uid", "==", user?.uid));
+      const doc = await getDocs(q);
+      const id = doc.docs[0].id;
+      setHotelId(id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   const onFinish = async (values) => {
-    console.log("values: ", values);
-    //need auth user's hotelId //useEffect
+    const data = {
+      ...values,
+      hotelId
+    }
+    try {
+      const docRef = await addDoc(collection(db, "menu"), data);
+      message.success(createSuccess);
+      form.resetFields();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   return (
