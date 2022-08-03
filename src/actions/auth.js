@@ -11,7 +11,7 @@ const logInWithEmailAndPassword = async (email, password) => {
   }
 };
 
-const registerWithEmailAndPassword = async (email, password) => {
+const registerWithEmailAndPassword = async (name, email, password) => {
 
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -19,6 +19,7 @@ const registerWithEmailAndPassword = async (email, password) => {
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       authProvider: "local",
+      name,
       email,
     });
   } catch (err) {
